@@ -3,11 +3,14 @@ title: Designing an AI-Augmented Writing Workflow for a Technical Blog
 slug: ai-augmented-writing-workflow
 description: HelioSent를 위해 설계한 AI-assisted writing workflow의 구조와 trade-off를 정리한다.
 date: 2026-02-16
+updated: 2026-02-16
 tags:
   - ai
   - workflow
   - labs
   - productivity
+version: "v1"
+designNotes: true
 ---
 
 # Designing an AI-Augmented Writing Workflow for a Technical Blog
@@ -17,7 +20,7 @@ tags:
 ## Problem
 
 AI가 draft를 만들어주는 시대지만, 사고의 주체는 사람이 되어야 한다.  
-그래서 목표는 “속도”와 “깊이”를 동시에 만족하는 writing workflow를 만드는 것이었다.
+그래서 목표는 "속도"와 "깊이"를 동시에 만족하는 writing workflow를 만드는 것이었다.
 
 ## System Design
 
@@ -45,3 +48,13 @@ Prompt → Draft → Refine → Publish
 Feedback → Prompt 개선
 
 writing도 product iteration으로 다룬다.
+
+<DesignNotes>
+
+이 글의 구조는 의도적으로 problem → system → trade-off → mindset 순서를 따른다.
+AI workflow를 설명할 때 흔히 빠지는 함정은 도구 소개에 치중하는 것이다.
+대신 사고 구조를 먼저 제시하고, 도구는 그 구조를 실현하는 수단으로 배치했다.
+
+writing workflow 자체를 product로 바라보는 관점은 HelioSent의 핵심 철학이다.
+
+</DesignNotes>
