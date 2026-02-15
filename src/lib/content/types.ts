@@ -17,6 +17,9 @@ export interface Post {
   content: string
   permalink: string
   section: Section
+  featured: boolean
+  series?: string
+  seriesOrder?: number
   cover?: Blog["cover"]
   url?: string
   repo?: string

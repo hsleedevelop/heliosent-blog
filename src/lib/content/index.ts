@@ -6,6 +6,7 @@ import type { Post, VelitePost } from "./types"
 export { SECTIONS, isValidSection, getSectionByKey } from "@/lib/sections"
 export type { Section, SectionDef } from "@/lib/sections"
 export type { Post } from "./types"
+export { extractToc, type TocItem } from "./toc"
 
 const COLLECTION_MAP: Record<Section, VelitePost[]> = {
   blog: blogs,
@@ -85,4 +86,35 @@ export function getPostsByTag(tag: string): Post[] {
   return getAllPosts().filter((post) =>
     post.tags.some((t) => normalizeTag(t) === normalized)
   )
+}
+
+export function getAdjacentPosts(
+  section: Section,
+  slug: string,
+): { prev: Post | null; next: Post | null } {
+  const posts = getPostsBySection(section)
+  const index = posts.findIndex((p) => p.slug === slug)
+  if (index === -1) return { prev: null, next: null }
+  return {
+    prev: index < posts.length - 1 ? posts[index + 1] : null,
+    next: index > 0 ? posts[index - 1] : null,
+  }
+}
+
+export function getSeriesPosts(section: Section, series: string): Post[] {
+  return getPostsBySection(section)
+    .filter((p) => p.series === series)
+    .sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0))
+}
+
+export function getFeaturedPost(): Post | undefined {
+  return getAllPosts().find((p) => p.featured)
+}
+
+export function getLatestBySection(limit = 3): { section: Section; label: string; posts: Post[] }[] {
+  return SECTIONS.map((s) => ({
+    section: s.key,
+    label: s.label,
+    posts: getPostsBySection(s.key).slice(0, limit),
+  })).filter((g) => g.posts.length > 0)
 }

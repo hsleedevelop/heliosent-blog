@@ -7,10 +7,17 @@ import {
   getSectionByKey,
   getPostsBySection,
   getPostBySlug,
+  getAdjacentPosts,
+  getSeriesPosts,
+  extractToc,
   formatDate,
   formatReadingTime,
 } from "@/lib/content"
 import { TagBadge } from "@/components/tag-badge"
+import { TableOfContents, MobileToc } from "@/components/toc"
+import { ProseContent } from "@/components/prose-content"
+import { PostNavigation } from "@/components/post-navigation"
+import { SeriesNav } from "@/components/series-nav"
 
 interface PostPageProps {
   params: Promise<{ section: string; slug: string }>
@@ -46,6 +53,11 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) notFound()
 
   const meta = getSectionByKey(section)
+  const toc = extractToc(post.content)
+  const { prev, next } = getAdjacentPosts(section, slug)
+  const seriesPosts = post.series
+    ? getSeriesPosts(section, post.series)
+    : []
 
   return (
     <article className="flex flex-col gap-8">
@@ -72,10 +84,37 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
       </header>
 
-      <div
-        className="prose prose-neutral dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="relative">
+        <MobileToc items={toc} />
+
+        {post.series && seriesPosts.length > 1 && (
+          <div className="mt-4">
+            <SeriesNav
+              seriesName={post.series}
+              posts={seriesPosts}
+              currentSlug={post.slug}
+            />
+          </div>
+        )}
+
+        <ProseContent
+          html={post.content}
+          className="mt-6 prose prose-neutral dark:prose-invert max-w-none"
+        />
+
+        {toc.length > 0 && (
+          <aside className="hidden xl:block absolute left-full top-0 bottom-0 ml-8 w-48">
+            <nav className="sticky top-24">
+              <p className="text-xs font-medium text-muted-foreground mb-3">
+                목차
+              </p>
+              <TableOfContents items={toc} />
+            </nav>
+          </aside>
+        )}
+      </div>
+
+      <PostNavigation prev={prev} next={next} />
     </article>
   )
 }

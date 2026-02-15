@@ -3,6 +3,7 @@ title: 콘텐츠 레이어 구축기
 slug: building-content-layer
 description: Next.js 16과 Velite를 사용해 타입 안전한 콘텐츠 레이어를 구축하는 과정.
 date: 2025-02-16
+featured: true
 tags:
   - architecture
   - velite
@@ -30,6 +31,16 @@ src/app/blog/       (pages)
 공통 필드: `title`, `description`, `date`, `updated`, `draft`, `tags`
 
 Blog는 여기에 `cover`, `metadata` (읽기 시간, 단어 수), `excerpt`, `content`를 추가한다.
+
+```ts filename="velite.config.ts"
+const baseMeta = {
+  title: s.string().max(120),
+  description: s.string().max(260).optional(),
+  date: timestamp,
+  draft: s.boolean().default(false),
+  tags: s.array(s.string()).default([]),
+}
+```
 
 ## 결론
 

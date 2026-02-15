@@ -1,4 +1,9 @@
 import { defineConfig, defineCollection, s } from "velite"
+import rehypeSlug from "rehype-slug"
+import rehypeAutolinkHeadings from "rehype-autolink-headings"
+import rehypeShiki from "@shikijs/rehype"
+import type { RehypeShikiOptions } from "@shikijs/rehype"
+import type { ShikiTransformer } from "shiki"
 
 const timestamp = s.isodate()
 
@@ -9,6 +14,32 @@ const baseMeta = {
   updated: timestamp.optional(),
   draft: s.boolean().default(false),
   tags: s.array(s.string()).default([]),
+  featured: s.boolean().default(false),
+  series: s.string().optional(),
+  seriesOrder: s.number().optional(),
+}
+
+/** Adds data-filename attribute to <pre> when code fence has filename="..." meta */
+const codeMetaTransformer: ShikiTransformer = {
+  name: "code-meta",
+  pre(node) {
+    const raw = this.options.meta?.__raw
+    if (typeof raw === "string") {
+      const match = raw.match(/filename="([^"]+)"/)
+      if (match) {
+        node.properties["data-filename"] = match[1]
+      }
+    }
+  },
+}
+
+const shikiOptions: RehypeShikiOptions = {
+  themes: {
+    light: "github-light",
+    dark: "github-dark",
+  },
+  defaultColor: "light",
+  transformers: [codeMetaTransformer],
 }
 
 const blogs = defineCollection({
@@ -109,4 +140,12 @@ export default defineConfig({
     clean: true,
   },
   collections: { blogs, essays, labs, architectures, apps },
+  markdown: {
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "wrap" }],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- velite's bundled unified types conflict with @shikijs/rehype
+      [rehypeShiki as any, shikiOptions],
+    ],
+  },
 })
