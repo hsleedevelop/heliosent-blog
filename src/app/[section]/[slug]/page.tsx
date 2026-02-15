@@ -12,12 +12,16 @@ import {
   formatDate,
   formatReadingTime,
 } from "@/lib/content"
+import { getThinkingMode } from "@/lib/thinking-modes"
+import { getRelatedPosts } from "@/lib/related"
+import { ArticleJsonLd } from "@/lib/structured-data"
 import { Badge } from "@/components/ui/badge"
 import { TableOfContents, MobileToc } from "@/components/toc"
 import { ProseContent } from "@/components/prose-content"
 import { PrevNext } from "@/components/prev-next"
 import { SeriesBlock } from "@/components/series-block"
 import { ThinkingModeBadge } from "@/components/thinking-mode-badge"
+import { RelatedPosts } from "@/components/related-posts"
 import { SystemContext } from "@/components/system-context"
 import { DesignNotes } from "@/components/design-notes"
 import { layout, type as t, prose } from "@/lib/ui/tokens"
@@ -43,9 +47,25 @@ export async function generateMetadata({
   if (!isValidSection(section)) return {}
   const post = getPostBySlug(section, slug)
   if (!post) return {}
+
+  const mode = getThinkingMode(section)
+  const ogUrl = `/api/og?title=${encodeURIComponent(post.title)}&section=${section}&mode=${encodeURIComponent(mode.label)}`
+
   return {
     title: `${post.title} — Heliosent`,
     description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: "article",
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [ogUrl],
+    },
   }
 }
 
@@ -65,10 +85,12 @@ export default async function PostPage({ params }: PostPageProps) {
   const seriesPosts = post.series
     ? getSeriesPosts(section, post.series)
     : []
+  const relatedPosts = getRelatedPosts(slug, section, post.tags)
 
   return (
     <div className={layout.mainWithTocGrid}>
       <article>
+        <ArticleJsonLd post={post} />
         <h1 className={t.h1}>{post.title}</h1>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -126,6 +148,8 @@ export default async function PostPage({ params }: PostPageProps) {
         />
 
         {designNotesHtml && <DesignNotes html={designNotesHtml} />}
+
+        <RelatedPosts posts={relatedPosts} />
 
         <SystemContext section={section} tags={post.tags} />
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getAllThinkingModes } from "@/lib/thinking-modes"
+import { getPostsBySection } from "@/lib/content"
 import { type as t } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
 
@@ -36,23 +37,33 @@ export default function AboutPage() {
       <h2 className={cn(t.h2, "mt-12")}>Thinking Modes</h2>
 
       <ul className="mt-6 space-y-4">
-        {modes.map((mode) => (
-          <li key={mode.section} className="flex flex-col gap-1">
-            <Link
-              href={mode.href}
-              className="text-sm font-medium underline underline-offset-4 decoration-border hover:decoration-foreground"
-            >
-              {mode.label}
-            </Link>
-            <span className="text-sm text-muted-foreground">
-              {mode.definition}
-            </span>
-          </li>
-        ))}
+        {modes.map((mode) => {
+          const count = getPostsBySection(mode.section).length
+          return (
+            <li key={mode.section} className="flex flex-col gap-1">
+              <div className="flex items-baseline gap-2">
+                <Link
+                  href={mode.href}
+                  className="text-sm font-medium underline underline-offset-4 decoration-border hover:decoration-foreground"
+                >
+                  {mode.label}
+                </Link>
+                {count > 0 && (
+                  <span className="text-xs text-muted-foreground/60">
+                    — {count} {count === 1 ? "post" : "posts"}
+                  </span>
+                )}
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {mode.definition}
+              </span>
+            </li>
+          )
+        })}
       </ul>
 
       <p className="mt-16 text-xs text-muted-foreground/60">
-        Brand Layer v1
+        Brand Layer v1.1
       </p>
     </div>
   )
