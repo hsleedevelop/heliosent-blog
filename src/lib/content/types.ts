@@ -2,7 +2,7 @@ import type { Blog, Essay, Lab, Architecture, App } from "#content"
 import type { Section } from "@/lib/sections"
 
 export { SECTIONS, isValidSection, getSectionByKey } from "@/lib/sections"
-export type { Section, SectionKey } from "@/lib/sections"
+export type { Section, SectionKey, SectionMeta } from "@/lib/sections"
 
 export interface Post {
   title: string
@@ -23,6 +23,8 @@ export interface Post {
   cover?: Blog["cover"]
   url?: string
   repo?: string
+  version?: string
+  designNotes: boolean
 }
 
 export type VelitePost = Blog | Essay | Lab | Architecture | App

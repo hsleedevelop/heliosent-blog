@@ -203,3 +203,21 @@
 .prose :is(h2, h3, h4):hover a {
   text-decoration: underline;
 }
+
+/* --- Design notes (native <details>) --- */
+.design-notes summary::-webkit-details-marker {
+  display: none;
+}
+
+.design-notes summary::marker {
+  content: "";
+}
+
+.design-notes summary::before {
+  content: "▸ ";
+  font-size: 0.75rem;
+}
+
+.design-notes[open] summary::before {
+  content: "▾ ";
+}

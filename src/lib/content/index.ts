@@ -4,7 +4,7 @@ import type { Section } from "@/lib/sections"
 import type { Post, VelitePost } from "./types"
 
 export { SECTIONS, isValidSection, getSectionByKey } from "@/lib/sections"
-export type { Section, SectionKey } from "@/lib/sections"
+export type { Section, SectionKey, SectionMeta } from "@/lib/sections"
 export type { Post } from "./types"
 export { extractToc, type TocItem } from "./toc"
 
@@ -117,4 +117,17 @@ export function getLatestBySection(limit = 3): { section: Section; label: string
     label: s.label,
     posts: getPostsBySection(s.key).slice(0, limit),
   })).filter((g) => g.posts.length > 0)
+}
+
+const DESIGN_NOTES_RE = /<DesignNotes>([\s\S]*?)<\/DesignNotes>/i
+
+export function extractDesignNotes(html: string): {
+  main: string
+  notes: string | null
+} {
+  const match = html.match(DESIGN_NOTES_RE)
+  if (!match) return { main: html, notes: null }
+  const notes = match[1].trim()
+  const main = html.replace(DESIGN_NOTES_RE, "").trim()
+  return { main, notes }
 }

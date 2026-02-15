@@ -17,6 +17,8 @@ const baseMeta = {
   featured: s.boolean().default(false),
   series: s.string().optional(),
   seriesOrder: s.number().optional(),
+  version: s.string().optional(),
+  designNotes: s.boolean().default(false),
 }
 
 /** Adds data-filename attribute to <pre> when code fence has filename="..." meta */
