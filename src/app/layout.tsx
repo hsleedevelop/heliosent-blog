@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { TopNav } from "@/components/top-nav"
 import { layout } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
@@ -37,12 +38,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className={layout.shell}>
-            <TopNav />
-            <main className={cn(layout.container, layout.sectionY)}>
-              {children}
-            </main>
-          </div>
+          <TooltipProvider delayDuration={300}>
+            <div className={layout.shell}>
+              <TopNav />
+              <main className={cn(layout.container, layout.sectionY)}>
+                {children}
+              </main>
+            </div>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

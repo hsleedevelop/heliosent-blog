@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { getFeaturedPost, getLatestBySection } from "@/lib/content"
 import { PostCard } from "@/components/post-card"
+import { ThinkingModesStrip } from "@/components/thinking-modes-strip"
 import { type as t } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
 
@@ -21,6 +22,8 @@ export default function Home() {
           featured
         />
       )}
+
+      <ThinkingModesStrip />
 
       {sections.map((group) => (
         <section key={group.section} className="flex flex-col gap-4">

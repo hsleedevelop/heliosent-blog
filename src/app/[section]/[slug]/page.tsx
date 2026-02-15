@@ -3,7 +3,6 @@ import { notFound } from "next/navigation"
 import {
   SECTIONS,
   isValidSection,
-  getSectionByKey,
   getPostsBySection,
   getPostBySlug,
   getAdjacentPosts,
@@ -54,7 +53,6 @@ export default async function PostPage({ params }: PostPageProps) {
   const { section, slug } = await params
   if (!isValidSection(section)) notFound()
 
-  const sectionMeta = getSectionByKey(section)
   const post = getPostBySlug(section, slug)
   if (!post) notFound()
 
@@ -74,7 +72,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <h1 className={t.h1}>{post.title}</h1>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <ThinkingModeBadge section={sectionMeta} />
+          <ThinkingModeBadge section={section} />
           {post.version && (
             <span className="text-xs text-muted-foreground">
               Version: {post.version}
@@ -129,7 +127,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
         {designNotesHtml && <DesignNotes html={designNotesHtml} />}
 
-        <SystemContext section={sectionMeta} tags={post.tags} />
+        <SystemContext section={section} tags={post.tags} />
 
         <div className="mt-10">
           <PrevNext
