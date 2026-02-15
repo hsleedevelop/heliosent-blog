@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SiteHeader } from "@/components/site-header"
+import { TopNav } from "@/components/top-nav"
+import { layout } from "@/lib/ui/tokens"
+import { cn } from "@/lib/utils"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -35,11 +37,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="mx-auto min-h-dvh max-w-2xl px-6 py-12 sm:px-8">
-            <div className="flex flex-col gap-8">
-              <SiteHeader />
-              <main>{children}</main>
-            </div>
+          <div className={layout.shell}>
+            <TopNav />
+            <main className={cn(layout.container, layout.sectionY)}>
+              {children}
+            </main>
           </div>
         </ThemeProvider>
       </body>

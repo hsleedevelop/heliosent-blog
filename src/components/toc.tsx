@@ -1,32 +1,49 @@
-import type { TocItem } from "@/lib/content"
+import type { TocItem } from "@/lib/content/toc"
+import { layout, toc as tocTokens } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
+import { TocActiveList } from "@/components/toc-active-tracker"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { Button } from "@/components/ui/button"
+import { ChevronDown } from "lucide-react"
 
 interface TocProps {
   items: TocItem[]
-  className?: string
 }
 
-export function TableOfContents({ items, className }: TocProps) {
+function StaticTocList({ items }: { items: TocItem[] }) {
+  return (
+    <ul className={tocTokens.list}>
+      {items.map((item) => (
+        <li key={item.id}>
+          <a
+            href={`#${item.id}`}
+            className={cn(
+              tocTokens.item,
+              item.level === 3 && tocTokens.itemH3,
+            )}
+          >
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export function TableOfContents({ items }: TocProps) {
   if (items.length === 0) return null
 
   return (
-    <nav aria-label="Table of contents" className={className}>
-      <ul className="space-y-1.5 text-sm">
-        {items.map((item) => (
-          <li key={item.id}>
-            <a
-              href={`#${item.id}`}
-              className={cn(
-                "block text-muted-foreground hover:text-foreground transition-colors leading-snug",
-                item.level === 3 && "pl-3 text-xs",
-              )}
-            >
-              {item.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <aside className={layout.tocCol}>
+      <nav className={layout.tocSticky} aria-label="Table of contents">
+        <p className={tocTokens.title}>On this page</p>
+        <TocActiveList items={items} />
+      </nav>
+    </aside>
   )
 }
 
@@ -34,13 +51,18 @@ export function MobileToc({ items }: TocProps) {
   if (items.length === 0) return null
 
   return (
-    <details className="xl:hidden rounded-md border px-4 py-3">
-      <summary className="text-sm font-medium cursor-pointer select-none">
-        목차
-      </summary>
-      <div className="pt-3 pb-1">
-        <TableOfContents items={items} />
-      </div>
-    </details>
+    <div className="lg:hidden">
+      <Collapsible>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" className="w-full justify-between text-sm">
+            On this page
+            <ChevronDown className="size-4" />
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="pt-2 pb-4">
+          <StaticTocList items={items} />
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
   )
 }

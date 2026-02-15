@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import Link from "next/link"
 import {
   SECTIONS,
   isValidSection,
-  getSectionByKey,
   getPostsBySection,
   getPostBySlug,
   getAdjacentPosts,
@@ -13,11 +11,13 @@ import {
   formatDate,
   formatReadingTime,
 } from "@/lib/content"
-import { TagBadge } from "@/components/tag-badge"
+import { Badge } from "@/components/ui/badge"
 import { TableOfContents, MobileToc } from "@/components/toc"
 import { ProseContent } from "@/components/prose-content"
-import { PostNavigation } from "@/components/post-navigation"
-import { SeriesNav } from "@/components/series-nav"
+import { PrevNext } from "@/components/prev-next"
+import { SeriesBlock } from "@/components/series-block"
+import { layout, type as t, prose } from "@/lib/ui/tokens"
+import { cn } from "@/lib/utils"
 
 interface PostPageProps {
   params: Promise<{ section: string; slug: string }>
@@ -52,69 +52,66 @@ export default async function PostPage({ params }: PostPageProps) {
   const post = getPostBySlug(section, slug)
   if (!post) notFound()
 
-  const meta = getSectionByKey(section)
-  const toc = extractToc(post.content)
+  const tocItems = extractToc(post.content)
   const { prev, next } = getAdjacentPosts(section, slug)
   const seriesPosts = post.series
     ? getSeriesPosts(section, post.series)
     : []
 
   return (
-    <article className="flex flex-col gap-8">
-      <header className="flex flex-col gap-2">
-        <Link
-          href={`/${section}`}
-          className="text-sm text-muted-foreground hover:underline"
-        >
-          &larr; {meta.label}
-        </Link>
-        <h1 className="text-xl font-medium tracking-tight">{post.title}</h1>
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+    <div className={layout.mainWithTocGrid}>
+      <article>
+        <h1 className={t.h1}>{post.title}</h1>
+
+        <div className={cn(t.meta, "mt-4 flex flex-wrap gap-x-4 gap-y-2")}>
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           {post.metadata.readingTime > 0 && (
             <span>{formatReadingTime(post.metadata.readingTime)}</span>
           )}
+          {post.tags.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
         </div>
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {post.tags.map((tag) => (
-              <TagBadge key={tag} tag={tag} />
-            ))}
-          </div>
-        )}
-      </header>
-
-      <div className="relative">
-        <MobileToc items={toc} />
 
         {post.series && seriesPosts.length > 1 && (
-          <div className="mt-4">
-            <SeriesNav
+          <div className="mt-6">
+            <SeriesBlock
               seriesName={post.series}
-              posts={seriesPosts}
+              posts={seriesPosts.map((p) => ({
+                title: p.title,
+                href: p.permalink,
+                slug: p.slug,
+              }))}
               currentSlug={post.slug}
             />
           </div>
         )}
 
+        <MobileToc items={tocItems} />
+
         <ProseContent
           html={post.content}
-          className="mt-6 prose prose-neutral dark:prose-invert max-w-none"
+          className={cn(
+            "mt-8",
+            prose.wrap,
+            prose.calm,
+            prose.a,
+            prose.codeInline,
+            prose.pre,
+          )}
         />
 
-        {toc.length > 0 && (
-          <aside className="hidden xl:block absolute left-full top-0 bottom-0 ml-8 w-48">
-            <nav className="sticky top-24">
-              <p className="text-xs font-medium text-muted-foreground mb-3">
-                목차
-              </p>
-              <TableOfContents items={toc} />
-            </nav>
-          </aside>
-        )}
-      </div>
+        <div className="mt-10">
+          <PrevNext
+            prev={prev ? { title: prev.title, href: prev.permalink } : null}
+            next={next ? { title: next.title, href: next.permalink } : null}
+          />
+        </div>
+      </article>
 
-      <PostNavigation prev={prev} next={next} />
-    </article>
+      <TableOfContents items={tocItems} />
+    </div>
   )
 }

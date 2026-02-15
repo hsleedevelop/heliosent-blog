@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { getFeaturedPost, getLatestBySection } from "@/lib/content"
-import { FeaturedCard } from "@/components/featured-card"
 import { PostCard } from "@/components/post-card"
+import { type as t } from "@/lib/ui/tokens"
+import { cn } from "@/lib/utils"
 
 export default function Home() {
   const featured = getFeaturedPost()
@@ -9,7 +10,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-10">
-      {featured && <FeaturedCard post={featured} />}
+      {featured && (
+        <PostCard
+          title={featured.title}
+          href={featured.permalink}
+          summary={featured.description}
+          date={featured.date}
+          readingTime={featured.metadata.readingTime}
+          tags={featured.tags}
+          featured
+        />
+      )}
 
       {sections.map((group) => (
         <section key={group.section} className="flex flex-col gap-4">
@@ -17,15 +28,22 @@ export default function Home() {
             <h2 className="text-sm font-medium">{group.label}</h2>
             <Link
               href={`/${group.section}`}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className={cn(t.meta, "hover:text-foreground transition-colors")}
             >
               전체 보기 &rarr;
             </Link>
           </div>
-          <ul className="flex flex-col gap-4">
+          <ul className="space-y-4">
             {group.posts.map((post) => (
               <li key={post.slug}>
-                <PostCard post={post} />
+                <PostCard
+                  title={post.title}
+                  href={post.permalink}
+                  summary={post.description}
+                  date={post.date}
+                  readingTime={post.metadata.readingTime}
+                  tags={post.tags}
+                />
               </li>
             ))}
           </ul>
@@ -33,7 +51,7 @@ export default function Home() {
       ))}
 
       {sections.length === 0 && !featured && (
-        <p className="text-muted-foreground">아직 글이 없습니다.</p>
+        <p className={t.meta}>아직 글이 없습니다.</p>
       )}
     </div>
   )

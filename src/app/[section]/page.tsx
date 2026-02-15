@@ -8,6 +8,7 @@ import {
 } from "@/lib/content"
 import { PostCard } from "@/components/post-card"
 import { EmptySection } from "@/components/empty-section"
+import { type as t } from "@/lib/ui/tokens"
 
 interface SectionPageProps {
   params: Promise<{ section: string }>
@@ -25,7 +26,6 @@ export async function generateMetadata({
   const meta = getSectionByKey(section)
   return {
     title: `${meta.label} — Heliosent`,
-    description: meta.description,
   }
 }
 
@@ -37,23 +37,29 @@ export default async function SectionPage({ params }: SectionPageProps) {
   const posts = getPostsBySection(section)
 
   return (
-    <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="text-lg font-medium tracking-tight">{meta.label}</h1>
-        {posts.length > 0 && (
-          <p className="mt-1 text-sm text-muted-foreground">
-            {posts.length}개의 글
-          </p>
-        )}
-      </header>
+    <div>
+      <h1 className={t.h1}>{meta.label}</h1>
+      {posts.length > 0 && (
+        <p className={t.lead}>{posts.length}개의 글</p>
+      )}
 
       {posts.length === 0 ? (
         <EmptySection />
       ) : (
-        <ul className="flex flex-col gap-6">
+        <ul className="mt-8 space-y-4">
           {posts.map((post) => (
             <li key={post.slug}>
-              <PostCard post={post} />
+              <PostCard
+                title={post.title}
+                href={post.permalink}
+                summary={post.description}
+                date={post.date}
+                readingTime={post.metadata.readingTime}
+                tags={post.tags}
+                section={post.section}
+                featured={post.featured}
+                series={post.series}
+              />
             </li>
           ))}
         </ul>

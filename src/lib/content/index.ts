@@ -4,7 +4,7 @@ import type { Section } from "@/lib/sections"
 import type { Post, VelitePost } from "./types"
 
 export { SECTIONS, isValidSection, getSectionByKey } from "@/lib/sections"
-export type { Section, SectionDef } from "@/lib/sections"
+export type { Section, SectionKey } from "@/lib/sections"
 export type { Post } from "./types"
 export { extractToc, type TocItem } from "./toc"
 

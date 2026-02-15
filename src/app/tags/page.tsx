@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { getAllTags } from "@/lib/content"
+import { type as t } from "@/lib/ui/tokens"
 
 export const metadata: Metadata = {
   title: "Tags — Heliosent",
@@ -12,18 +13,14 @@ export default function TagsPage() {
   const tags = getAllTags()
 
   return (
-    <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="text-lg font-medium tracking-tight">Tags</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {tags.length}개의 태그
-        </p>
-      </header>
+    <div>
+      <h1 className={t.h1}>Tags</h1>
+      <p className={t.lead}>{tags.length}개의 태그</p>
 
       {tags.length === 0 ? (
-        <p className="text-muted-foreground">아직 태그가 없습니다.</p>
+        <p className={t.meta}>아직 태그가 없습니다.</p>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-8 flex flex-wrap gap-2">
           {tags.map(({ tag, count }) => (
             <Badge key={tag} variant="secondary" asChild>
               <Link href={`/tags/${tag}`}>

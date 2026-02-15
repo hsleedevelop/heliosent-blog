@@ -2,7 +2,7 @@ import type { Blog, Essay, Lab, Architecture, App } from "#content"
 import type { Section } from "@/lib/sections"
 
 export { SECTIONS, isValidSection, getSectionByKey } from "@/lib/sections"
-export type { Section, SectionDef } from "@/lib/sections"
+export type { Section, SectionKey } from "@/lib/sections"
 
 export interface Post {
   title: string

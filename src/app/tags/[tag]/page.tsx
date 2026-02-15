@@ -2,13 +2,14 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getAllTags, getPostsByTag } from "@/lib/content"
 import { PostCard } from "@/components/post-card"
+import { type as t } from "@/lib/ui/tokens"
 
 interface TagPageProps {
   params: Promise<{ tag: string }>
 }
 
 export function generateStaticParams() {
-  return getAllTags().map(({ tag }) => ({ tag }))
+  return getAllTags().map((entry) => ({ tag: entry.tag }))
 }
 
 export async function generateMetadata({
@@ -28,18 +29,21 @@ export default async function TagDetailPage({ params }: TagPageProps) {
   if (posts.length === 0) notFound()
 
   return (
-    <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="text-lg font-medium tracking-tight">#{tag}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {posts.length}개의 글
-        </p>
-      </header>
+    <div>
+      <h1 className={t.h1}>#{tag}</h1>
+      <p className={t.lead}>{posts.length}개의 글</p>
 
-      <ul className="flex flex-col gap-6">
+      <ul className="mt-8 space-y-4">
         {posts.map((post) => (
           <li key={`${post.section}-${post.slug}`}>
-            <PostCard post={post} />
+            <PostCard
+              title={post.title}
+              href={post.permalink}
+              summary={post.description}
+              date={post.date}
+              readingTime={post.metadata.readingTime}
+              tags={post.tags}
+            />
           </li>
         ))}
       </ul>

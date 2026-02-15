@@ -1,33 +1,63 @@
 import Link from "next/link"
-import { formatDate, formatReadingTime, type Post } from "@/lib/content"
-import { TagBadge } from "@/components/tag-badge"
+import { Badge } from "@/components/ui/badge"
+import { ui, type as t } from "@/lib/ui/tokens"
+import { cn } from "@/lib/utils"
 
 interface PostCardProps {
-  post: Post
+  title: string
+  href: string
+  summary?: string
+  date: string
+  readingTime?: number
+  tags?: string[]
+  section?: string
+  featured?: boolean
+  series?: string
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({
+  title,
+  href,
+  summary,
+  date,
+  readingTime,
+  tags,
+}: PostCardProps) {
   return (
-    <Link href={post.permalink} className="group flex flex-col gap-1.5">
-      <span className="font-medium group-hover:underline">{post.title}</span>
-      {post.description && (
-        <span className="text-sm text-muted-foreground line-clamp-2">
-          {post.description}
-        </span>
-      )}
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
-        {post.metadata.readingTime > 0 && (
-          <span>{formatReadingTime(post.metadata.readingTime)}</span>
+    <div className={cn(ui.card, ui.cardP, ui.cardHover)}>
+      <Link
+        href={href}
+        className="text-lg font-semibold tracking-tight hover:underline"
+      >
+        {title}
+      </Link>
+
+      {summary && <p className={cn(t.meta, "mt-2")}>{summary}</p>}
+
+      <div className={cn(t.meta, "mt-3 flex flex-wrap gap-x-4 gap-y-1")}>
+        <time dateTime={date}>{formatDate(date)}</time>
+        {readingTime != null && readingTime > 0 && (
+          <span>{Math.ceil(readingTime)}분 읽기</span>
         )}
       </div>
-      {post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 pt-0.5">
-          {post.tags.map((tag) => (
-            <TagBadge key={tag} tag={tag} linked={false} />
+
+      {tags && tags.length > 0 && (
+        <div className={ui.tagWrap}>
+          {tags.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
           ))}
         </div>
       )}
-    </Link>
+    </div>
   )
+}
+
+function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 }
