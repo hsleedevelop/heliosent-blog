@@ -1,0 +1,23 @@
+---
+description: TypeScript 및 React/Next 컴포넌트 패턴
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# TypeScript & React 규칙
+
+- 함수형 컴포넌트만 사용. `"use client"`는 클라이언트 훅/이벤트가 필요한 컴포넌트에만.
+- 컴포넌트는 `@/components` 또는 `@/components/ui`에서 import. UI 조합은 shadcn 컴포넌트 우선.
+- 타입은 `interface`로 props 정의. `any` 사용 금지.
+- 스타일: Tailwind + `cn()` (class variance). 인라인 스타일 지양.
+
+```tsx
+// ✅ GOOD - props 인터페이스, cn 사용
+interface CardProps {
+  title: string;
+  className?: string;
+}
+export function Card({ title, className }: CardProps) {
+  return <div className={cn("rounded-lg border", className)}>{title}</div>;
+}
+```

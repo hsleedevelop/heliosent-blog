@@ -1,0 +1,36 @@
+---
+title: 콘텐츠 레이어 구축기
+slug: building-content-layer
+description: Next.js 16과 Velite를 사용해 타입 안전한 콘텐츠 레이어를 구축하는 과정.
+date: 2025-02-16
+tags:
+  - architecture
+  - velite
+  - next.js
+---
+
+정적 블로그의 핵심은 콘텐츠 파이프라인이다. 마크다운 파일을 작성하면, 빌드 타임에 파싱되어 타입이 보장된 데이터로 변환되고, 이를 React 컴포넌트에서 소비한다.
+
+## 아키텍처
+
+```
+content/blog/*.mdx
+      ↓  velite build
+.velite/blogs.json  (typed)
+      ↓  import
+src/lib/content.ts  (loader)
+      ↓  consume
+src/app/blog/       (pages)
+```
+
+## 스키마 설계
+
+각 콘텐츠 타입은 공통 메타데이터를 공유하면서, 섹션별 고유 필드를 확장한다.
+
+공통 필드: `title`, `description`, `date`, `updated`, `draft`, `tags`
+
+Blog는 여기에 `cover`, `metadata` (읽기 시간, 단어 수), `excerpt`, `content`를 추가한다.
+
+## 결론
+
+Velite의 `defineCollection`과 `s` 스키마 빌더는 Contentlayer의 정신적 후계자다. 빌드 타임 안전성과 DX를 동시에 제공한다.

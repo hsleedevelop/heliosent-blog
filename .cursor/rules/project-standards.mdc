@@ -1,0 +1,12 @@
+---
+description: Heliosent Blog 프로젝트 공통 표준
+alwaysApply: true
+---
+
+# Heliosent Blog 프로젝트 규칙
+
+- **스택**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui (new-york)
+- **경로 별칭**: `@/components`, `@/lib`, `@/components/ui`, `@/lib/utils` 사용
+- **스타일**: shadcn 컴포넌트는 `src/components/ui/`, 공통 유틸은 `src/lib/utils.ts` (cn 등)
+- **응답**: AI는 사용자와 한국어로 소통
+- **변경 시**: 기존 디자인 시스템(shadcn, globals.css 변수)과 일관성 유지

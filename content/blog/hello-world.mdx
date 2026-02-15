@@ -1,0 +1,23 @@
+---
+title: Hello World
+slug: hello-world
+description: Velite 콘텐츠 파이프라인을 검증하기 위한 첫 번째 포스트.
+date: 2025-02-15
+tags:
+  - meta
+  - blog
+---
+
+블로그의 첫 번째 글이다. Velite를 사용해 빌드 타임에 MDX를 파싱하고, 타입이 보장된 데이터를 Next.js App Router에서 소비하는 구조를 검증한다.
+
+## 왜 Velite인가
+
+Contentlayer가 사실상 관리되지 않는 상태에서, Velite는 Zod 기반 스키마와 빌드 타임 변환을 제공하는 가장 현실적인 대안이다.
+
+- **타입 안전성**: 스키마에서 TypeScript 타입이 자동 생성된다.
+- **빌드 타임**: 런타임 파싱 없이 정적 JSON으로 변환된다.
+- **유연성**: Markdown, MDX, YAML, JSON 모두 지원한다.
+
+## 다음 단계
+
+이 파이프라인이 검증되면 essays, labs, architecture, apps 섹션으로 확장한다.
