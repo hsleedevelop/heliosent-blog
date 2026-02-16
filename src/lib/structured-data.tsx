@@ -1,4 +1,4 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://heliosent.com"
+import { siteConfig } from "@/lib/site/config"
 
 interface ArticlePost {
   title: string
@@ -22,19 +22,26 @@ interface ArticleJsonLdData {
   articleSection: string
   description?: string
   url: string
+  mainEntityOfPage: { "@type": string; "@id": string }
+  image?: { "@type": string; url: string; width: number; height: number }
 }
 
 export function generateArticleJsonLd(post: ArticlePost): ArticleJsonLdData {
+  const postUrl = siteConfig.url + post.permalink
+  const ogUrl = `${siteConfig.url}/api/og?title=${encodeURIComponent(post.title)}&section=${post.section}`
+
   const data: ArticleJsonLdData = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     datePublished: post.date,
-    author: { "@type": "Person", name: "HelioSent" },
-    publisher: { "@type": "Organization", name: "HelioSent" },
+    author: { "@type": "Person", name: siteConfig.author.name },
+    publisher: { "@type": "Organization", name: siteConfig.name },
     keywords: post.tags,
     articleSection: post.section,
-    url: SITE_URL + post.permalink,
+    url: postUrl,
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    image: { "@type": "ImageObject", url: ogUrl, width: 1200, height: 630 },
   }
 
   if (post.updated) {

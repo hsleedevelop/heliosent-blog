@@ -6,6 +6,7 @@ import {
   getSectionByKey,
   getPostsBySection,
 } from "@/lib/content"
+import { getThinkingMode } from "@/lib/thinking-modes"
 import { PostCard } from "@/components/post-card"
 import { EmptySection } from "@/components/empty-section"
 import { type as t } from "@/lib/ui/tokens"
@@ -24,8 +25,27 @@ export async function generateMetadata({
   const { section } = await params
   if (!isValidSection(section)) return {}
   const meta = getSectionByKey(section)
+  const mode = getThinkingMode(section)
+  const ogUrl = `/api/og?title=${encodeURIComponent(meta.label)}&section=${section}&mode=${encodeURIComponent(mode.label)}`
+
   return {
-    title: `${meta.label} — Heliosent`,
+    title: meta.label,
+    description: meta.layerDescription,
+    alternates: {
+      canonical: `/${section}`,
+    },
+    openGraph: {
+      title: meta.label,
+      description: meta.layerDescription,
+      type: "website",
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: meta.label }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.label,
+      description: meta.layerDescription,
+      images: [ogUrl],
+    },
   }
 }
 

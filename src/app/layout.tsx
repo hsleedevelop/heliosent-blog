@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { TopNav } from "@/components/top-nav"
 import { layout } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
+import { siteConfig } from "@/lib/site/config"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -17,12 +18,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://heliosent.com"
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: "Heliosent",
-  description: "Heliosent blog",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.name,
+    template: `%s — ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  openGraph: {
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    type: "website",
+    images: [
+      {
+        url: "/api/og?title=HelioSent",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
+  },
 }
 
 export default function RootLayout({

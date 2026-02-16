@@ -1,9 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { getFeaturedPost, getLatestBySection } from "@/lib/content"
 import { PostCard } from "@/components/post-card"
 import { ThinkingModesStrip } from "@/components/thinking-modes-strip"
+import { siteConfig } from "@/lib/site/config"
 import { type as t } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
+
+export const metadata: Metadata = {
+  description: siteConfig.description,
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    type: "website",
+  },
+}
 
 export default function Home() {
   const featured = getFeaturedPost()

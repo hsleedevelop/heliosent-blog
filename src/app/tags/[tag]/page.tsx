@@ -16,9 +16,27 @@ export async function generateMetadata({
   params,
 }: TagPageProps): Promise<Metadata> {
   const { tag } = await params
+  const description = `Posts tagged with "${tag}" on HelioSent.`
+  const ogUrl = `/api/og?title=${encodeURIComponent(`#${tag}`)}`
+
   return {
-    title: `#${tag} — Heliosent`,
-    description: `"${tag}" 태그가 포함된 글 목록`,
+    title: `#${tag}`,
+    description,
+    alternates: {
+      canonical: `/tags/${tag}`,
+    },
+    openGraph: {
+      title: `#${tag}`,
+      description,
+      type: "website",
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: `#${tag}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `#${tag}`,
+      description,
+      images: [ogUrl],
+    },
   }
 }
 

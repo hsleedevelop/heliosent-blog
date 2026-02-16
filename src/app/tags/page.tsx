@@ -4,9 +4,27 @@ import { Badge } from "@/components/ui/badge"
 import { getAllTags } from "@/lib/content"
 import { type as t } from "@/lib/ui/tokens"
 
+const description = "Browse all tags across HelioSent."
+
 export const metadata: Metadata = {
-  title: "Tags — Heliosent",
-  description: "모든 태그 목록",
+  title: "Tags",
+  description,
+  alternates: {
+    canonical: "/tags",
+  },
+  openGraph: {
+    title: "Tags",
+    description,
+    type: "website",
+    images: [
+      {
+        url: "/api/og?title=Tags",
+        width: 1200,
+        height: 630,
+        alt: "HelioSent Tags",
+      },
+    ],
+  },
 }
 
 export default function TagsPage() {

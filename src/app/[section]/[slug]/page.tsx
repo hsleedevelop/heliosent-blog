@@ -52,12 +52,19 @@ export async function generateMetadata({
   const ogUrl = `/api/og?title=${encodeURIComponent(post.title)}&section=${section}&mode=${encodeURIComponent(mode.label)}`
 
   return {
-    title: `${post.title} — Heliosent`,
+    title: post.title,
     description: post.description,
+    alternates: {
+      canonical: post.permalink,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
+      publishedTime: post.date,
+      modifiedTime: post.updated,
+      authors: ["HelioSent"],
+      tags: post.tags,
       images: [{ url: ogUrl, width: 1200, height: 630, alt: post.title }],
     },
     twitter: {

@@ -5,9 +5,27 @@ import { getPostsBySection } from "@/lib/content"
 import { type as t } from "@/lib/ui/tokens"
 import { cn } from "@/lib/utils"
 
+const description = "What HelioSent is and how it thinks."
+
 export const metadata: Metadata = {
-  title: "About — Heliosent",
-  description: "What HelioSent is and how it thinks.",
+  title: "About",
+  description,
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About",
+    description,
+    type: "website",
+    images: [
+      {
+        url: "/api/og?title=About",
+        width: 1200,
+        height: 630,
+        alt: "About HelioSent",
+      },
+    ],
+  },
 }
 
 export default function AboutPage() {
