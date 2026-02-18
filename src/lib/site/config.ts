@@ -8,7 +8,7 @@ export const siteConfig = {
     "An engineering space for structured thinking and applied systems.",
   locale: "en_US",
   author: {
-  name: "HelioAent Blog",
+  name: "HelioSent Blog",
     url: SITE_URL,
   },
 } as const

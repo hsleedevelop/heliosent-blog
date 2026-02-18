@@ -30,7 +30,7 @@ export function TopNav() {
             href="https://heliosent.com"
             className="hover:text-muted-foreground transition-colors"
           >
-            HelioAent
+            HelioSent
           </a>
           <Link href="/" className="text-[#707070] hover:text-muted-foreground transition-colors">
             Blog

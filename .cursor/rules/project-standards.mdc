@@ -1,9 +1,9 @@
 ---
-description: Heliosent Blog 프로젝트 공통 표준
+description: HelioSent Blog 프로젝트 공통 표준
 alwaysApply: true
 ---
 
-# Heliosent Blog 프로젝트 규칙
+# HelioSent Blog 프로젝트 규칙
 
 - **스택**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui (new-york)
 - **경로 별칭**: `@/components`, `@/lib`, `@/components/ui`, `@/lib/utils` 사용

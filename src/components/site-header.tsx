@@ -12,7 +12,7 @@ export function SiteHeader() {
             href="https://heliosent.com"
             className="hover:text-muted-foreground transition-colors"
           >
-            HelioAent
+            HelioSent
           </a>
           <Link href="/" className="hover:text-muted-foreground transition-colors">
             Blog
