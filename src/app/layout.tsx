@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/api/og?title=HelioSent",
+        url: "/api/og?title=HelioSent+blog",
         width: 1200,
         height: 630,
         alt: siteConfig.name,

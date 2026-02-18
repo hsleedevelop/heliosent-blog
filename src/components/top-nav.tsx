@@ -25,9 +25,17 @@ export function TopNav() {
   return (
     <header className={layout.header}>
       <div className={cn(layout.container, "flex h-14 items-center justify-between")}>
-        <Link href="/" className="text-base font-semibold tracking-tight">
-          HelioSent
-        </Link>
+        <div className="flex items-baseline gap-1 text-base font-semibold tracking-tight">
+          <a
+            href="https://heliosent.com"
+            className="hover:text-muted-foreground transition-colors"
+          >
+            HelioAent
+          </a>
+          <Link href="/" className="text-[#707070] hover:text-muted-foreground transition-colors">
+            Blog
+          </Link>
+        </div>
 
         <nav className="hidden items-center gap-6 sm:flex">
           {SECTIONS.map((s) => (
